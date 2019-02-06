@@ -4,8 +4,8 @@
     <div>
       <span>Parent to child</span>&nbsp;&nbsp;&nbsp;&nbsp; <button @click="mutate_child('child1')">Random Num in C1</button>&nbsp;&nbsp;&nbsp;&nbsp; <button @click="mutate_child('child2')">Random Num in C2</button>
     </div>
-    <Child msg="Child" ref-id="child1" @childPing="log_event" v-declare="'child1'" />
-    <Child msg="Child" ref-id="child2" @childPing="log_event" v-declare="'child2'" />
+    <Child msg="Child" ref="child1" />
+    <Child msg="Child" ref="child2" />
     <div class="ping-log">
       <h4>Ping Log (Events)</h4>
       <div class="log">
@@ -19,6 +19,7 @@
 
 <script>
 import Child from './Child.vue'
+import { Superbus } from '../main'
 
 export default {
   name: 'Parent',
@@ -38,7 +39,6 @@ export default {
       return Math.floor(Math.random() * 10);
     },
     mutate_child: function(ref) {
-      console.log(this);
       this.$refs[ref].randomNum = this.randomGen();
     },
     log_event: function(e) {
@@ -46,7 +46,10 @@ export default {
     }
   },
   created: function() {
-    //console.log(this);
+    var self = this;
+    Superbus.$on('childPing', function(e) {
+      self.log_event(e);
+    })
   }
 }
 </script>

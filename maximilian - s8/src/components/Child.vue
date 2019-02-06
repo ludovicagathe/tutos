@@ -7,6 +7,8 @@
 </template>
 
 <script>
+import { Superbus } from '../main'
+
 export default {
   name: 'Child',
   props: {
@@ -20,7 +22,7 @@ export default {
   },
   methods: {
     pingParent: function() {
-      this.$emit("childPing", this.refId);
+      Superbus.$emit("childPing", this.$vnode.data.ref);
     }
   }
 }

@@ -1,15 +1,12 @@
 import Vue from 'vue'
 import App from './App.vue'
+import Vuetify from 'vuetify'
 
 Vue.config.productionTip = false;
+Vue.use(Vuetify);
 
-Vue.directive('declare', {
-  bind: function (el, binding, vnode) {
-  	console.log(vnode);
-  	Vue.set(vnode.data, "ref", binding.value);
-  }
-})
+export const Superbus = new Vue();
 
 new Vue({
-  render: function (h) { return h(App) },
-}).$mount('#app')
+  render: function (h) { return h(App) }
+}).$mount('#app');

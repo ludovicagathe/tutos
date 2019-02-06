@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <Parent msg="Welcome to Your Vue.js App" v-declare="'parent'" />
+    <Parent msg="Welcome to Your Vue.js App" ref="parent" />
   </div>
 </template>
 
