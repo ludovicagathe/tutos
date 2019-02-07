@@ -1,19 +1,22 @@
 <template>
     <div class="col-xs-12 col-sm-6">
         <ul class="list-group">
-            <li
-                    class="list-group-item" :class="state_class(server.status)"
-                    v-for="server in servers.filter(function(server) { return server.active })">
-                Server id : {{ server.id }} &nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;{{ server.type }}
-                <ServerDetails :server-details="server" @term="terminate"></ServerDetails>
+            <li class="list-group-item" v-for="server in servers">
+                <div  @click="show_actions(server.id)">Server id : {{ server.id }} &nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;{{ server.type }}</div>
+                <app-server-details :server-info="server" @term="terminate" @rebooted="rebooted" @arch="archive"></app-server-details>
             </li>
         </ul>
     </div>
 </template>
 
 <script>
-import ServerDetails from './ServerDetails.vue'
+import ServerDetails from './ServerDetails.vue';
+
 export default {
+  components: {
+      'app-server-details': ServerDetails
+  },
+
   data: function() {
     return {
       servers: [
@@ -24,7 +27,18 @@ export default {
       ]
     };
   },
+
   methods: {
+    show_actions: function(e) {
+      var index = this.servers.findIndex(function(server) { return server.id == e })
+      this.servers[index].isOpen = !this.servers[index].isOpen;
+    },
+    rebooted: function(e) {
+      var index = this.servers.findIndex(function(server) { return server.id == e })
+      if(this.servers[index].status == 'critical'){
+        this.servers[index].status = 'normal';
+      }
+    },
     state_class: function(status) {
       var st = {"background-color": "", "color": ""};
       switch(status) {
@@ -42,10 +56,16 @@ export default {
           break;
       }
     },
+    active_servers: function() {
+      return this.servers.filter(function(server) { return server.active });
+    },
     terminate: function(e) {
-      servers[servers.findIndex(function(server) { return server.id == e })].status = "terminated";
-    }
-  }
+      this.servers[this.servers.findIndex(function(server) { return server.id == e })].status = "terminated";
+    },
+    archive: function(e) {
+      this.servers[this.servers.findIndex(function(server) { return server.id == e })].active = false;
+    },
+  },
 }
 </script>
 

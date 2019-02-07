@@ -1,28 +1,29 @@
 <template>
-    <div class="col-xs-12 col-sm-6">
-        <p>Server status: {{ serverInfo.status }} &nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;
-          <span v-show="serverInfo.active">
-          <button class="btn-reboot server-action" @click="reboot">{{ reboot_label }}</button>&nbsp;
-          <button class="btn-terminate server-action" @click="terminate">{{ terminator }}</button>&nbsp;
-          <button class="btn-keep server-action" v-show="confirm_remove">Keep as is</button>&nbsp;
-          <button class="btn-archive server-action">{{ archivor }}</button>&nbsp;
-          <button class="btn-archive-not server-action" v-show="confirm_archive">Keep as is</button>&nbsp;
-        </span>
-        </p>
-    </div>
-
+  <div v-show="serverInfo.active">Server status: {{ serverInfo.status }} &nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;
+      <div v-show="serverInfo.isOpen">
+      <button class="btn-reboot server-action" @click="reboot" v-show="serverInfo.status == 'normal' || serverInfo.status == 'critical'">{{ reboot_label }}</button>&nbsp;
+      <button class="btn-terminate server-action" @click="terminate" v-show="serverInfo.status == 'normal' || serverInfo.status == 'critical'">{{ terminator() }}</button>&nbsp;
+      <button class="btn-keep server-action" v-show="confirm_remove" @click="confirm_remove = false">Keep as is</button>&nbsp;
+      <button class="btn-archive server-action" @click="archive" v-show="serverInfo.status == 'terminated' || serverInfo.status == 'unknown'">{{ archivor() }}</button>&nbsp;
+      <button class="btn-archive-not server-action" v-show="confirm_archive" @click="confirm_archive = false">Keep as is</button>&nbsp;
+      </div>
+  </div>
 </template>
 
 <script>
 export default {
   props: {
-    serverInfo: Object
+    'serverInfo': [Object]
   },
   data: function() {
     return {
       confirm_remove: false,
       confirm_archive: false,
-      reboot_label: "Reload"
+      reboot_label: "Reload",
+      received: {
+        status: "default",
+        id: 99999
+      }
     }
   },
   methods: {
@@ -31,8 +32,8 @@ export default {
       self.reboot_label = "Rebooting...";
       setTimeout(function() {
         self.reboot_label = "Reload";
-        this.$emit('rebooted', 1);
-      }, 500);
+        self.$emit('rebooted', self.serverInfo.id);
+      }, 1000);
     },
     terminator: function() {
       return (this.confirm_remove) ? "Confirm" : "Terminate";
@@ -41,22 +42,22 @@ export default {
       if(!this.confirm_remove) {
         this.confirm_remove = !this.confirm_remove;
       } else {
-        this.$emit('term', serverInfo.id);
+        this.$emit('term', this.serverInfo.id);
         this.confirm_remove = !this.confirm_remove;
       }
     },
     archivor: function() {
       return (this.confirm_remove) ? "Confirm" : "Archive";
     },
-    terminate: function() {
+    archive: function() {
       if(!this.confirm_archive) {
         this.confirm_archive = !this.confirm_archive;
       } else {
-        this.$emit('arch', serverInfo.id);
+        this.$emit('arch', this.serverInfo.id);
         this.confirm_archive = !this.confirm_archive;
       }
     }
-  }
+  },
 }
 </script>
 
