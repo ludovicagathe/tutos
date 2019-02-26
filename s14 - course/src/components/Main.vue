@@ -10,8 +10,11 @@
         <transition name="fade">
           <div class="pink accent-2 teal--text text--darken-2 font-weight-bold mb-2 pa-2" v-if="visible">This is toggled</div>
         </transition>
-        <transition name="slide">
+        <transition name="slide" type="animation">
           <div class="pink accent-2 teal--text text--darken-2 font-weight-bold mb-2 pa-2" v-if="visible">This is toggled</div>
+        </transition>
+        <transition name="slide" type="animation" appear>
+          <div class="pink accent-2 teal--text text--darken-2 font-weight-bold mb-2 pa-2">This is toggled</div>
         </transition>
       </v-flex>
 
@@ -42,34 +45,36 @@ export default {
   opacity: 0;
 }
 .slide-enter {
-  transform: translateY(50px);
+  opacity: 0;
 }
 .slide-enter-active {
-  animation: slidein 1s ease-in 1 forwards;
+  animation: slidein 0.5s ease-out forwards;
+  transition: opacity 1s;
 }
 .slide-leave {
 
 }
 .slide-leave-active {
-  transform: translateY(50px);
-  animation: slideout 1s ease-out 1 forwards;
+  animation: slideout 0.5s ease-in forwards;
+  opacity: 0;
+  transition: opacity 1s;
 }
 
-@keyframe slidein {
+@keyframes slidein {
   0% {
-    transform: translateY(50px);
+    transform: translateY(20px);
   }
   100% {
     transform: translateY(0px);
   }
 }
 
-@keyframe slideout {
+@keyframes slideout {
   0% {
     transform: translateY(0px);
   }
   100% {
-    transform: translateY(50px);
+    transform: translateY(20px);
   }
 }
 </style>
