@@ -38,7 +38,23 @@
         <transition mode="out-in" name="fade">
           <component :is="active_component"></component>
         </transition>
+        <br>
         <hr>
+        <br>
+        <v-btn color="primary" @click="add_item()">Add item</v-btn>
+        <br>
+        <v-list two-line>
+          <transition-group tag="div" name="slide">
+            <template v-for="(item, key) in items">
+              <v-list-tile :key="item">
+                <v-list-tile-content @click="remove_item(key)">
+                  <div class="text-xs-center font-weight-bold">{{ item }}</div>
+                </v-list-tile-content>
+                <v-divider></v-divider>
+              </v-list-tile>
+            </template>
+          </transition-group>
+        </v-list>
       </v-flex>
 
     </v-layout>
@@ -54,7 +70,8 @@ export default {
     visible: false,
     toggle: true,
     element_width: 100,
-    active_component: 'success-alert'
+    active_component: 'success-alert',
+    items: [0,1,2,3,4,5,6,7,8,9]
   }),
   methods: {
     beforeEnter(el) {
@@ -104,6 +121,18 @@ export default {
     },
     leaveCancelled() {
       console.log("not leaving");
+    },
+    add_item() {
+      for(var i = 0; i < this.items.length; i++) {
+        if(this.items[i] != i) {
+          this.items.splice(i, 0, i);
+          return;
+        }
+      }
+      this.items.push(this.items.length);
+    },
+    remove_item(val) {
+      this.items.splice(val, 1);
     }
   },
   components: {
@@ -141,6 +170,11 @@ export default {
   animation: slideout 0.5s ease-in forwards;
   opacity: 0;
   transition: opacity 1s;
+  position: absolute;
+}
+
+.slide-move {
+  transition: transform 1s;
 }
 
 @keyframes slidein {
