@@ -4,11 +4,11 @@
       text-xs-center
       wrap
     >
-      <transition name="fade" appear>
-        <v-flex xs6 offset-xs3 mb-5 v-if="!started">
+
+        <v-flex xs6 offset-xs3 mb-5 v-if="!started" transition="fade" appear>
           <v-btn color="success" @click="start_quiz">START</v-btn>
         </v-flex>
-      </transition>
+
 
       <transition name="pushin" mode="out-in" class="flex xs12">
         <v-flex xs6 offset-xs3 mb-5 v-if="finish" :key="'finish'">
@@ -19,20 +19,13 @@
         </v-flex>
       </transition>
 
-      <transition-group tag="div" name="pushin" mode="out-in" class="flex xs12">
-        <v-flex xs6 offset-xs3 mb-5 v-if="started" :key="'question-' + Math.round(Math.random() * 100)">
-          <template v-for="(question, index) in asking">
-            <div class="text-xs center" :key="'q-' + index">
+
+        <transition-group tag="div" name="pushin" class="flex xs6 offset-xs3 mb-5 text-xs-center flatten-me">
+            <div v-for="(question, index) in asking" :key="'q-' + index">
               <h2 class="text-xs-center">What is {{ question.evaluate }} ?</h2>
-              <v-layout row wrap>
-                <v-flex xs6 v-for="(option, ind) in question.shuffle" :key="'op-' + ind">
-                  <v-btn color="primary" @click="check_answer(option)">{{ option }}</v-btn>
-                </v-flex>
-              </v-layout>
             </div>
-          </template>
-        </v-flex>
-      </transition-group>
+        </transition-group>
+
     </v-layout>
   </v-container>
 </template>
@@ -131,7 +124,7 @@ export default {
         }
         if(this.asking[0].right_answer == true) {
           this.active_question++;
-          this.asking.pop();
+          this.asking.splice(0, 1);
           if(this.active_question < this.questions.length) {
             this.$nextTick(function() {
               this.asking.push(this.questions[this.active_question]);
@@ -151,34 +144,31 @@ export default {
   opacity: 0;
 }
 .fade-enter-active {
-  transition: opacity 2s;
-}
-.fade-leave {
-  position: absolute;
+  transition: opacity 0.5s;
 }
 .fade-leave-active {
   transform: translateX(-1000px);
   opacity: 0;
-  transition: transform 2s ease-in, opacity 2s ease-out;
+  transition: transform 0.5s ease-in, opacity 0.5s ease-out;
 }
 
-.pushin-enter {
+.pushin-enter, .pushin-leave-active {
   opacity: 0;
-  transform: translateX(1000px);
+}
+.pushin-enter-active, .pushin-leave-active {
+  transition: all 2s ease-in;
 }
 .pushin-enter-active {
-  transition: transform 2s ease-in, opacity 2s ease-in;
-}
-.pushin-leave {
-  overflow: visible;
+  /* transform: translateX(1000px); */
+  opacity: 1
 }
 .pushin-leave-active {
-  transition: transform 2s ease-in, opacity 2s ease-out, height 0.01s ease-in;
-  height: 1px;
+  /* transform: translateX(-1000px); */
 }
-.pushin-leave-to {
-  transform: translateX(-1000px);
-  opacity: 0;
+
+.flatten-me {
   height: 1px;
+  overflow: visible;
+  margin-top: -1px;
 }
 </style>

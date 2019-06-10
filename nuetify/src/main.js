@@ -1,8 +1,11 @@
 import Vue from 'vue'
 import './plugins/vuetify'
 import App from './App.vue'
+import Axios from 'axios'
 
-Vue.config.productionTip = false
+Vue.prototype.$http = Axios;
+Vue.config.productionTip = false;
+require('es6-promise').polyfill();
 
 new Vue({
   render: h => h(App),

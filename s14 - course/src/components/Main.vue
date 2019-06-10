@@ -75,11 +75,13 @@ export default {
   }),
   methods: {
     beforeEnter(el) {
+      // eslint-disable-next-line
       console.log("before enter");
       this.element_width = 100;
       el.style.width = this.element_width + 'px';
     },
     enter(el, done) {
+      // eslint-disable-next-line
       console.log("entering");
       var self = this;
       let round = 1;
@@ -92,18 +94,25 @@ export default {
         }
       }, 20);
     },
+    // eslint-disable-next-line
     afterEnter(el) {
+      // eslint-disable-next-line
       console.log("entered");
     },
+    // eslint-disable-next-line
     enterCancelled(el) {
+      // eslint-disable-next-line
       console.log("cancelled");
     },
+    // eslint-disable-next-line
     beforeLeave(el) {
+      // eslint-disable-next-line
       console.log("before leaving");
       this.element_width = 300;
       el.style.width = this.element_width + 'px';
     },
     leave(el, done) {
+      // eslint-disable-next-line
       console.log("leaving");
       var self = this;
       let round = 1;
@@ -116,10 +125,13 @@ export default {
         }
       }, 20);
     },
+    // eslint-disable-next-line
     afterLeave(el) {
+      // eslint-disable-next-line
       console.log("left");
     },
     leaveCancelled() {
+      // eslint-disable-next-line
       console.log("not leaving");
     },
     add_item() {
