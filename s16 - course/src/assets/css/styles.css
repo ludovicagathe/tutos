@@ -1,0 +1,23 @@
+.slide-router-enter {
+  opacity: 0 !important;
+  transform: translateX(-2000px) scaleY(0) !important;
+  transition: opacity 1s ease-in, transform 1s ease-in !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+}
+
+.slide-router-enter-active {
+  opacity: 1;
+  transform: translateX(0px) scaleY(1);
+  transition: opacity 1s ease-in, transform 1s ease-in;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.slide-router-leave-active {
+  opacity: 0;
+  transform: translateX(2000px);
+  transition: opacity 1s ease-in, transform 1s ease-in;
+}

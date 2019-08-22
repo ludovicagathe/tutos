@@ -13,7 +13,9 @@
       wrap
     >
       <v-flex xs12>
-        <router-view :users="users"></router-view>
+        <transition name="slide-router">
+          <router-view :users="users" @update-user="user_updated"></router-view>
+        </transition>
       </v-flex>
     </v-layout>
   </v-container>
@@ -31,13 +33,16 @@ export default {
     }
   }, methods: {
     go_home() {
-      this.$router.push('/');
+      this.$router.push({ name: 'home', query: {'from': this.$route.path}});
       return;
     },
+    user_updated(e) {
+      this.$emit('update-user', e);
+    }
   },
 }
 </script>
 
 <style>
-
+@import '../assets/css/styles.css';
 </style>

@@ -30,10 +30,13 @@ export default {
     }
   },
   watch: {
-    '$route'(to) {
-      this.user = this.users.filter(user => { return to.params.id == user.id })[0];
+    '$route': {
+      immediate: true,
+      handler(to) {
+        this.user = this.users.filter(user => { return to.params.id == user.id })[0];
+      }
     }
-  },
+  }
 }
 </script>
 

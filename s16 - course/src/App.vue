@@ -3,19 +3,31 @@
     <Toolbar>
       <span>Vuetify</span>
       <span class="font-weight-light">Boilerplate</span>
-      <span class="ml-2">
-        <ul>
-          <router-link class="ml-5" :to="{ name: 'home', params: {} }" active-class="active" exact>Home</router-link>
-          <router-link class="ml-5" :to="{ name: 'user-list', params: {} }" active-class="active" exact>Users</router-link>
-          <template v-for="user in users">
-            <router-link class="ml-5" :to="{ name: 'user-details', params: { id: user.id} }" active-class="active" :key="user.id" exact>User with ID {{ user.id }}</router-link>
-          </template>
-        </ul>
-      </span>
     </Toolbar>
-    <v-content>
-      <router-view :users="users"></router-view>
-    </v-content>
+    <v-container mt-5>
+      <v-layout
+        text-xs-center
+        wrap
+      >
+        <v-flex xs12>
+          <transition name="slide-router">
+            <router-view :users="users"  name="link-bar-top"></router-view>
+          </transition>
+        </v-flex>
+        <v-flex xs12>
+          <v-content>
+            <transition name="slide-router">
+              <router-view :users="users" @update-user="refresh_user"></router-view>
+            </transition>
+          </v-content>
+        </v-flex>
+        <v-flex xs12>
+          <transition name="slide-router">
+            <router-view :users="users"  name="link-bar-bot"></router-view>
+          </transition>
+        </v-flex>
+      </v-layout>
+    </v-container>
   </v-app>
 </template>
 
@@ -36,6 +48,16 @@ export default {
         { name: "elsie", id: 4, role: "mother" },
       ]
     }
+  },
+  methods: {
+    refresh_user(e) {
+      this.users.forEach(user => {
+        if (user.id == e.id) {
+          user.name = e.name;
+          user.role = e.role;
+        }
+      })
+    }
   }
 }
 </script>
@@ -44,12 +66,17 @@ export default {
   background-color: #03acf4;
 }
 
-ul, li {
-  display: inline;
+>>> ul{
+  display: block;
 }
 
-li {
+>>> li {
   list-style: none;
+  display: inline;
   padding: 2px 6px;
 }
+</style>
+
+<style>
+@import './assets/css/styles.css';
 </style>

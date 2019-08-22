@@ -12,13 +12,16 @@
           height="200"
         ></v-img>
       </v-flex>
-
     </v-layout>
   </v-container>
 </template>
 
 <script>
+
 export default {
+  components: {
+
+  },
   data: () => ({
 
   })
