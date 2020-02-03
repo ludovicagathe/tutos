@@ -44,6 +44,16 @@ export default new Vuex.Store({
       "Port Louis",
       "Curepipe",
       "Rose Hill"
+    ],
+    enforcement: [
+      {id: 1, name: "Mr O. Sewtohul", function: "Ag. DEE"},
+      {id: 2, name: "Mr K. Ramkurrun", function: "E/SE EE"},
+      {id: 3, name: "Ms N. Safee", function: "E/SE EE"},
+      {id: 4, name: "Engineer 4", function: "E/SE EE"},
+      {id: 5, name: "Mr K. Sooruth", function: "Ag. E/SE EE"},
+      {id: 6, name: "Mr J.V.L. Agathe", function: "TO EE"},
+      {id: 7, name: "Mr H. Gunness", function: "TO EE"},
+      {id: 8, name: "Mr D. Mahadawoo", function: "TO EE"},
     ]
   },
   mutations: {
@@ -58,6 +68,9 @@ export default new Vuex.Store({
     },
     getRMCount: (state) => {
       return state.RMCount;
+    },
+    getEnforcement: (state) => {
+      return state.enforcement;
     }
   }
 })

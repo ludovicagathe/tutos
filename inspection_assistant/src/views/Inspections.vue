@@ -14,9 +14,9 @@
           <v-icon>mdi-sync</v-icon>
         </v-btn>
 
-        <v-btn href="/" dark color="primary">
+        <v-btn dark color="primary" @click="openAddInspection">
           <span class="mr-2">New Inspection</span>
-          <v-icon @click="dialogAdd = true">mdi-file-plus</v-icon>
+          <v-icon>mdi-file-plus</v-icon>
         </v-btn>
       </v-app-bar>
     </v-col>
@@ -71,7 +71,7 @@
   <v-row no-gutters>
     <v-col col="12">
       <v-footer fixed class="footer">
-        <div :class="{ 'low-storage' : lowStorage }" class="mr-4">localStorage: {{ localStorageTest }}</div>
+        <div :class="{ 'low-storage' : localStorageTest.low }" class="mr-4">localStorage: {{ localStorageTest.display }}</div>
         <div class="mr-4">RM Count: {{ this.$store.getters.getRMCount }}</div>
         <v-spacer></v-spacer>
         <div>&copy; {{ new Date().getFullYear() }}</div>
@@ -79,19 +79,43 @@
     </v-col>
   </v-row>
 
-  // modal
   <v-row justify="center">
     <v-dialog v-model="dialogAdd" persistent max-width="60%">
       <v-card>
         <v-card-title class="headline">Add New Sheet ?</v-card-title>
-        <v-card-text v-if="dialogText == ''">
+        <v-card-text>
+          <v-form class="pa-3" ref="form">
+            <v-text-field
+              label="Locality"
+              v-model="newInspection.locality"
+              :rules="validation.locality"
+            ></v-text-field>
 
+            <v-menu>
+              <template v-slot:activator="{ on }">
+                <v-text-field
+                  slot="activator"
+                  label="Date"
+                  prepend-icon="event"
+                  :value="newInspection.date"
+                  readonly v-on="on"
+                  :rules="validation.date"
+                ></v-text-field>
+              </template>
+              <v-date-picker v-model="newInspection.date"></v-date-picker>
+            </v-menu>
+
+            <v-select :items="enforcementList" label="Enforcement Officer 1" solo v-model="newInspection.officer1" :rules="validation.enforcement"></v-select>
+
+            <v-select :items="enforcementList" label="Enforcement Officer 2" solo v-model="newInspection.officer2" :rules="validation.enforcement"></v-select>
+
+          </v-form>
         </v-card-text>
-        <v-card-text v-else v-text="dialogText"></v-card-text>
+        <v-card-text v-if="dialogText != ''" v-text="dialogText" class="low-storage"></v-card-text>
         <v-card-actions>
-          <v-btn color="error dark" @click="dialogAdd = false">Disagree</v-btn>
+          <v-btn color="error dark" @click="dialogAdd = false">Cancel</v-btn>
           <v-spacer></v-spacer>
-          <v-btn color="success" text @click="addSheet">Agree</v-btn>
+          <v-btn color="success dark" @click="addSheet">Add</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -103,58 +127,72 @@
 export default {
   name: 'Inspections',
 
-  data: () => ({
-    localStorageTest: localStorage ? "Available" : "Not available",
-    lowStorage: false,
-    dialogAdd: false,
-    dialogText: ""
-  }),
+  data() {
+    return {
+      localStorageTest: {
+        used: 0,
+        total: 0,
+        display: 'Calculating...',
+        low: false
+      },
+      lowStorage: false,
+      dialogAdd: false,
+      dialogText: "",
+      newInspection: {
+        locality: "",
+        date: "",
+        officer1: "",
+        officer2: ""
+      },
+      validation: {
+        locality: [
+          val => (val && val.length > 2) || "Minimum input is 3 characters"
+        ],
+        date: [
+          val => (val && new Date(val).getTime() <= (new Date().getTime() + (4 * 3600000))) || "Inspection date cannot occur in the future"
+        ],
+        enforcement: [
+          val => (val && val.length > 0) || "Enforcement Officer field is mandatory",
+          val => (val && (this.newInspection.officer1 != this.newInspection.officer2) && (val != "")) || "Enforcement Officer " + val + " name cannot be used twice"
+        ]
+      }
+    }
+  },
 
   computed: {
     items() {
-      return this.$store.getters.getInspections
+      return this.$store.getters.getInspections;
+    },
+    enforcementList() {
+      return this.$store.getters.getEnforcement.map((obj) => {
+        return obj.name;
+      });
     }
   },
 
   methods: {
-    checkLocalStorage() {
-      let existingLocalStorage = JSON.stringify(localStorage).length;
-      let totalLocalStorage = 0;
-      if (localStorage) {
-        var i = 0;
-        try {
-            // Test up to 10 MB
-            for (i = 0; i < 10000; i += 250) {
-                localStorage.setItem('test', new Array((i * 1024) + 1).join('a'));
-            }
-        } catch (e) {
-            localStorage.removeItem('test');
-            totalLocalStorage = (i +  (existingLocalStorage / 1024)) / 1024;
-            if(totalLocalStorage - (existingLocalStorage / 1024) < totalLocalStorage / 10) {
-              this.lowStorage = true;
-            }
-        }
-      } else {
-        return {
-          used: 0,
-          total: 0
-        }
+    openAddInspection() {
+      if(this.newInspection.locality != "" || this.newInspection.date != "" || this.newInspection.officer1 != "" || this.newInspection.officer2 != "") {
+        this.newInspection.locality = ""; this.newInspection.date = ""; this.newInspection.officer1 = ""; this.newInspection.officer2 = "";
+        this.$refs.form.reset();
       }
-      this.localStorageTest = ((existingLocalStorage / 1024 / 1024)).toFixed(2) + " / " + totalLocalStorage.toFixed(2) + " MB";
-      return {
-        used: (existingLocalStorage / 1024 / 1024),
-        total: totalLocalStorage
-      }
+      this.dialogAdd = true;
     },
     addSheet() {
-      this.dialogAdd = false;
-
+      if(this.$refs.form.validate()) {
+        this.dialogAdd = false;
+        console.log(this.newInspection);
+      }
+    },
+    getLocalISODate() {
+      let today = new Date();
+      return today.getFullYear() + '-' + (today.getMonth() > 10 ? today.getMonth() : '0' + today.getMonth()) + '-' + (today.getDate() > 10 ? today.getDate() : '0' + today.getDate());
     }
   },
 
   mounted() {
     // test localStorage
-    this.checkLocalStorage();
+    this.localStorageTest = this.checkLocalStorage();
   }
 };
 </script>
