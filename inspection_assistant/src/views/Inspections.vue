@@ -32,29 +32,23 @@
           <v-col cols="12">
             <v-card max-width="96%" class="mx-auto">
               <v-toolbar color="blue darken-4" dark>
-                <v-toolbar-title class="subtitle-2 px-6">Date</v-toolbar-title>
+                <v-toolbar-title>Date</v-toolbar-title>
                 <v-spacer></v-spacer>
-                <v-toolbar-title class="subtitle-2">Locality</v-toolbar-title>
+                <v-toolbar-title>Locality</v-toolbar-title>
                 <v-spacer></v-spacer>
-                <v-toolbar-title class="subtitle-2">No. of Dealers</v-toolbar-title>
-                <v-spacer></v-spacer>
-                <v-toolbar-title class="subtitle-2">Delete</v-toolbar-title>
+                <v-toolbar-title>No. of Dealers</v-toolbar-title>
               </v-toolbar>
 
               <v-list two-line subheader>
-                <div v-for="(item, index) in items" :key="item.date">
+                <div v-for="(item, index) in items" :key="item.date + '-' + index">
                   <v-list-item>
                     <v-list-item-content v-text="item.date"></v-list-item-content>
                     <v-spacer></v-spacer>
                     <v-list-item-content v-text="item.locality"></v-list-item-content>
                     <v-spacer></v-spacer>
-                    <v-list-item-content v-text="item.dealers.length"></v-list-item-content>
-                    <v-spacer></v-spacer>
-                    <v-list-item-action>
-                      <v-btn icon>
-                        <v-icon color="red lighten-1">mdi-delete</v-icon>
-                      </v-btn>
-                    </v-list-item-action>
+                    <v-list-item-content>
+                      <span v-text="item.dealers.length" class="text-center"></span>
+                    </v-list-item-content>
                   </v-list-item>
                   <v-divider v-if="index + 1 < items.length" :key="index"></v-divider>
                 </div>
@@ -73,8 +67,9 @@
       <v-footer fixed class="footer">
         <div :class="{ 'low-storage' : localStorageTest.low }" class="mr-4">localStorage: {{ localStorageTest.display }}</div>
         <div class="mr-4">RM Count: {{ this.$store.getters.getRMCount }}</div>
+        <div class="mr-4" v-if="$store.getters.getLastSaved">Last Saved: {{ this.$store.getters.getLastSaved }}</div>
         <v-spacer></v-spacer>
-        <div>&copy; {{ new Date().getFullYear() }}</div>
+        <div>Developed by and &copy; EEMO 2020</div>
       </v-footer>
     </v-col>
   </v-row>
@@ -176,28 +171,37 @@ export default {
     openAddInspection() {
       if(this.newInspection.locality != "" || this.newInspection.date != "" || this.newInspection.officer1 != "" || this.newInspection.officer2 != "") {
         this.newInspection.locality = "";
-        this.newInspection.date = "";
         this.newInspection.officer1 = "";
         this.newInspection.officer2 = "";
+        this.newInspection.date = "";
         this.$refs.form.reset();
       }
       this.dialogAdd = true;
     },
     addInspection() {
+      let inspectionObject = {
+        locality: "",
+        date: "",
+        officer1: "",
+        officer2: "",
+        dealers: []
+      }
       if(this.$refs.form.validate()) {
         this.dialogAdd = false;
-        this.saveLocal = this.saveToStore(this.newInspection, 'inspections');
+        inspectionObject.locality = this.newInspection.locality;
+        inspectionObject.date = this.newInspection.date;
+        inspectionObject.officer1 = this.newInspection.officer1;
+        inspectionObject.officer2 = this.newInspection.officer2;
+        this.saveLocal = this.saveToStore(inspectionObject, 'inspections');
       }
     },
-    getLocalISODate() {
-      let today = new Date();
-      return today.getFullYear() + '-' + (today.getMonth() > 10 ? today.getMonth() : '0' + today.getMonth()) + '-' + (today.getDate() > 10 ? today.getDate() : '0' + today.getDate());
-    }
   },
 
   mounted() {
+    // attempt localStorage retrieval
+    this.$store.commit('retrieveLocalStorage');
     // test localStorage
-    this.localStorageTest = this.checkLocalStorage();
+    let localData = this.localStorageTest = this.checkLocalStorage(); this.$store.commit('setLocalStorageInfo', localData);
   }
 };
 </script>

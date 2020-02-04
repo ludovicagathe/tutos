@@ -1,47 +1,37 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-Vue.use(Vuex)
+Vue.use(Vuex);
+
+function getLocalISODate() {
+  let actual = new Date();
+  let tzo = -actual.getTimezoneOffset();
+  let dif = tzo >= 0 ? '+' : '-';
+  let pad = function(num) {
+    let norm = Math.floor(Math.abs(num));
+    return (norm < 10 ? '0' : '') + norm;
+  };
+  return actual.getFullYear() +
+    '-' + pad(actual.getMonth() + 1) +
+    '-' + pad(actual.getDate()) +
+    'T' + pad(actual.getHours()) +
+    ':' + pad(actual.getMinutes()) +
+    ':' + pad(actual.getSeconds()) +
+    dif + pad(tzo / 60) +
+    ':' + pad(tzo % 60);
+}
 
 export default new Vuex.Store({
   state: {
-    inspections: [
-      {
-        date: "2020-02-01",
-        locality: "Port Louis",
-        officer1: "Mr D. Mahadawoo",
-        officer2: "Mr H. Gunness",
-        dealers: [
-          {
-            name: "Discount Kings Ltd",
-            pos: "Cash and Pack, 48, Somewhere St., Port Louis",
-            brn: "C01029785"
-          },
-          {
-            name: "Money Saver Plus Ltd",
-            pos: "Elephanto, 58, Somewhere Else St., Port Louis",
-            brn: "C01021234"
-          },
-        ]
-      },
-      {
-        date: "2020-02-02",
-        locality: "Curepipe",
-        officer1: "Mr O. Sewtohul",
-        officer2: "Mr K. Ramkurrun",
-        dealers: []
-      }
-    ],
+    inspections: [],
     localStorageTest: (localStorage) ? true : false,
     localStorageCapacity: 0,
     localStorageUsed: 0,
-    lastSaved: "2020-02-01T23:59:00+04:00",
-    lastSynced: "2020-02-01T23:50:00+04:00",
+    lastSaved: "",
+    lastSynced: "",
     RMCount: 0,
+    RMData: [],
     localities: [
-      "Port Louis",
-      "Curepipe",
-      "Rose Hill"
     ],
     enforcement: [
       { id: 1, name: "Mr O. Sewtohul", function: "Ag. DEE" },
@@ -59,26 +49,56 @@ export default new Vuex.Store({
       state.inspections.push(inspection);
       let sentObj = JSON.stringify(inspection);
       let savedObj = JSON.stringify(state.inspections[state.inspections.length-1]);
+      state.lastSaved = getLocalISODate();
+      // eslint-disable-next-line
+      localStorage.setItem('saveLocal', JSON.stringify(state));
       if(sentObj == savedObj) {
         return true;
       } else {
         return false;
       }
-      localStorage.setItem('saveLocal', JSON.stringify(state));
+    },
+    setLocalStorageInfo(state, localData) {
+      state.localStorageUsed = localData.used;
+      state.localStorageCapacity = localData.total;
+    },
+    retrieveLocalStorage(state) {
+      let retVal = false;
+      if(localStorage && localStorage.saveLocal) {
+        let retrieved = JSON.parse(localStorage.getItem('saveLocal'));
+
+        state.inspections = retrieved.inspections || [];
+        state.localStorageTest = retrieved.localStorageTest || true;
+        state.localStorageCapacity = retrieved.localStorageCapacity || 0;
+        state.localStorageUsed = retrieved.localStorageUsed || 0;
+        state.lastSaved = retrieved.lastSaved || "";
+        state.lastSynced = retrieved.lastSynced || "";
+        state.RMCount = retrieved.RMCount || 0;
+        state.RMData = retrieved.RMData || [];
+        state.localities = retrieved.localities || [];
+
+        retVal = true;
+      }
+      return retVal;
     }
   },
   actions: {
 
   },
   getters: {
-    getInspections: (state) => {
-      return state.inspections;
+    getInspections(state) {
+      return state.inspections.sort((a , b) => {
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+      });
     },
-    getRMCount: (state) => {
+    getRMCount(state) {
       return state.RMCount;
     },
-    getEnforcement: (state) => {
+    getEnforcement(state) {
       return state.enforcement;
+    },
+    getLastSaved(state) {
+      return state.lastSaved;
     }
   }
 })
