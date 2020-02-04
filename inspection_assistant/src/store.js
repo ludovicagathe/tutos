@@ -9,8 +9,8 @@ export default new Vuex.Store({
       {
         date: "2020-02-01",
         locality: "Port Louis",
-        enforcement1_id: 1,
-        enforcement2_id: 2,
+        officer1: "Mr D. Mahadawoo",
+        officer2: "Mr H. Gunness",
         dealers: [
           {
             name: "Discount Kings Ltd",
@@ -27,11 +27,9 @@ export default new Vuex.Store({
       {
         date: "2020-02-02",
         locality: "Curepipe",
-        enforcement1_id: 1,
-        enforcement2_id: 2,
-        dealers: [
-
-        ]
+        officer1: "Mr O. Sewtohul",
+        officer2: "Mr K. Ramkurrun",
+        dealers: []
       }
     ],
     localStorageTest: (localStorage) ? true : false,
@@ -46,18 +44,27 @@ export default new Vuex.Store({
       "Rose Hill"
     ],
     enforcement: [
-      {id: 1, name: "Mr O. Sewtohul", function: "Ag. DEE"},
-      {id: 2, name: "Mr K. Ramkurrun", function: "E/SE EE"},
-      {id: 3, name: "Ms N. Safee", function: "E/SE EE"},
-      {id: 4, name: "Engineer 4", function: "E/SE EE"},
-      {id: 5, name: "Mr K. Sooruth", function: "Ag. E/SE EE"},
-      {id: 6, name: "Mr J.V.L. Agathe", function: "TO EE"},
-      {id: 7, name: "Mr H. Gunness", function: "TO EE"},
-      {id: 8, name: "Mr D. Mahadawoo", function: "TO EE"},
+      { id: 1, name: "Mr O. Sewtohul", function: "Ag. DEE" },
+      { id: 2, name: "Mr K. Ramkurrun", function: "E/SE EE" },
+      { id: 3, name: "Ms N. Safee", function: "E/SE EE" },
+      { id: 4, name: "Engineer 4", function: "E/SE EE" },
+      { id: 5, name: "Mr K. Sooruth", function: "Ag. E/SE EE" },
+      { id: 6, name: "Mr J.V.L. Agathe", function: "TO EE" },
+      { id: 7, name: "Mr H. Gunness", function: "TO EE" },
+      { id: 8, name: "Mr D. Mahadawoo", function: "TO EE" },
     ]
   },
   mutations: {
-
+    pushInspection(state, inspection) {
+      state.inspections.push(inspection);
+      let sentObj = JSON.stringify(inspection);
+      let savedObj = JSON.stringify(state.inspections[state.inspections.length-1]);
+      if(sentObj == savedObj) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   },
   actions: {
 

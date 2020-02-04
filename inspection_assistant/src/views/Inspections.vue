@@ -115,7 +115,7 @@
         <v-card-actions>
           <v-btn color="error dark" @click="dialogAdd = false">Cancel</v-btn>
           <v-spacer></v-spacer>
-          <v-btn color="success dark" @click="addSheet">Add</v-btn>
+          <v-btn color="success dark" @click="addInspection">Add</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -138,11 +138,13 @@ export default {
       lowStorage: false,
       dialogAdd: false,
       dialogText: "",
+      saveLocal: { error: false, errorDescription: ""},
       newInspection: {
         locality: "",
         date: "",
         officer1: "",
-        officer2: ""
+        officer2: "",
+        dealers: []
       },
       validation: {
         locality: [
@@ -173,15 +175,18 @@ export default {
   methods: {
     openAddInspection() {
       if(this.newInspection.locality != "" || this.newInspection.date != "" || this.newInspection.officer1 != "" || this.newInspection.officer2 != "") {
-        this.newInspection.locality = ""; this.newInspection.date = ""; this.newInspection.officer1 = ""; this.newInspection.officer2 = "";
+        this.newInspection.locality = "";
+        this.newInspection.date = "";
+        this.newInspection.officer1 = "";
+        this.newInspection.officer2 = "";
         this.$refs.form.reset();
       }
       this.dialogAdd = true;
     },
-    addSheet() {
+    addInspection() {
       if(this.$refs.form.validate()) {
         this.dialogAdd = false;
-        console.log(this.newInspection);
+        this.saveLocal = this.saveToStore(this.newInspection, 'inspections');
       }
     },
     getLocalISODate() {

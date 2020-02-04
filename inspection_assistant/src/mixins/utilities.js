@@ -63,5 +63,37 @@ export default {
         low: false
       }
     },
+    saveToStore(submittedObject, storeTarget) {
+      let retVal = {
+        errorDescription: "",
+        error: false
+      }
+
+      if(typeof storeTarget != 'string') {
+        retVal.error = true;
+        retVal.errorDescription = "Target argument should be of type 'String'";
+      }
+
+      if(storeTarget != "inspections" || storeTarget != "dealers") {
+        retVal.error = true;
+        retVal.errorDescription = "Target not found";
+      }
+
+      if(storeTarget == "inspections") {
+        if(!submittedObject || submittedObject.locality == "" || submittedObject.date == "" || submittedObject.officer1 == "" || submittedObject.officer2 == "") {
+          retVal.error = true;
+          retVal.errorDescription = "Inspection details missing. Saving failed";
+        } else {
+          if(!submittedObject.dealers) {
+            submittedObject.dealers = [];
+          }
+          if(!this.$store.commit('pushInspection', submittedObject)) {
+            retVal.errorDescription = "Saving might not have been successful. Verify data integrity"
+          }
+        }
+      }
+
+      return retVal;
+    }
   }
 }
