@@ -64,6 +64,7 @@ export default new Vuex.Store({
       } else {
         return false;
       }
+      localStorage.setItem('saveLocal', JSON.stringify(state));
     }
   },
   actions: {
