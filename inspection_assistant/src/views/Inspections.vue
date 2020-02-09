@@ -40,18 +40,20 @@
               </v-toolbar>
 
               <v-list two-line subheader>
-                <div v-for="(item, index) in items" :key="item.date + '-' + index">
-                  <v-list-item>
-                    <v-list-item-content v-text="item.date"></v-list-item-content>
-                    <v-spacer></v-spacer>
-                    <v-list-item-content v-text="item.locality"></v-list-item-content>
-                    <v-spacer></v-spacer>
-                    <v-list-item-content>
-                      <span v-text="item.dealers.length" class="text-center"></span>
-                    </v-list-item-content>
-                  </v-list-item>
-                  <v-divider v-if="index + 1 < items.length" :key="index"></v-divider>
-                </div>
+                <v-list-item-group color="primary">
+                  <div v-for="(item, index) in items" :key="item.date + '-' + index">
+                    <v-list-item color="primary">
+                      <v-list-item-content v-text="item.date"></v-list-item-content>
+                      <v-spacer></v-spacer>
+                      <v-list-item-content v-text="item.locality"></v-list-item-content>
+                      <v-spacer></v-spacer>
+                      <v-list-item-content>
+                        <span v-text="item.dealers.length" class="text-center"></span>
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-divider v-if="index + 1 < items.length" :key="index"></v-divider>
+                  </div>
+                </v-list-item-group>
 
 
               </v-list>
@@ -80,22 +82,11 @@
         <v-card-title class="headline">Add New Sheet ?</v-card-title>
         <v-card-text>
           <v-form class="pa-3" ref="form">
-            <v-text-field
-              label="Locality"
-              v-model="newInspection.locality"
-              :rules="validation.locality"
-            ></v-text-field>
+            <v-text-field label="Locality" v-model="newInspection.locality" :rules="validation.locality"></v-text-field>
 
             <v-menu>
               <template v-slot:activator="{ on }">
-                <v-text-field
-                  slot="activator"
-                  label="Date"
-                  prepend-icon="event"
-                  :value="newInspection.date"
-                  readonly v-on="on"
-                  :rules="validation.date"
-                ></v-text-field>
+                <v-text-field slot="activator" label="Date" prepend-icon="event" :value="newInspection.date" readonly v-on="on" :rules="validation.date"></v-text-field>
               </template>
               <v-date-picker v-model="newInspection.date"></v-date-picker>
             </v-menu>
@@ -133,7 +124,10 @@ export default {
       lowStorage: false,
       dialogAdd: false,
       dialogText: "",
-      saveLocal: { error: false, errorDescription: ""},
+      saveLocal: {
+        error: false,
+        errorDescription: ""
+      },
       newInspection: {
         locality: "",
         date: "",
@@ -169,7 +163,7 @@ export default {
 
   methods: {
     openAddInspection() {
-      if(this.newInspection.locality != "" || this.newInspection.date != "" || this.newInspection.officer1 != "" || this.newInspection.officer2 != "") {
+      if (this.newInspection.locality != "" || this.newInspection.date != "" || this.newInspection.officer1 != "" || this.newInspection.officer2 != "") {
         this.newInspection.locality = "";
         this.newInspection.officer1 = "";
         this.newInspection.officer2 = "";
@@ -186,7 +180,7 @@ export default {
         officer2: "",
         dealers: []
       }
-      if(this.$refs.form.validate()) {
+      if (this.$refs.form.validate()) {
         this.dialogAdd = false;
         inspectionObject.locality = this.newInspection.locality;
         inspectionObject.date = this.newInspection.date;
@@ -198,10 +192,9 @@ export default {
   },
 
   mounted() {
-    // attempt localStorage retrieval
     this.$store.commit('retrieveLocalStorage');
     // test localStorage
-    let localData = this.localStorageTest = this.checkLocalStorage(); this.$store.commit('setLocalStorageInfo', localData);
+    this.localStorageTest = this.checkLocalStorage();
   }
 };
 </script>
@@ -210,6 +203,7 @@ export default {
 .low-storage {
   color: red;
 }
+
 .footer {
   font-size: 0.75em
 }

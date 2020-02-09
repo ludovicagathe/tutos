@@ -68,6 +68,7 @@ export default {
         errorDescription: "",
         error: false
       }
+      submittedObject.synced = false;
 
       if(typeof storeTarget != 'string') {
         retVal.error = true;
