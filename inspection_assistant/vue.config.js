@@ -2,7 +2,7 @@ module.exports = {
   "transpileDependencies": [
     "vuetify"
   ],
-  baseUrl: '',
+  publicPath: '',
   pages: {
     index: {
       entry: './src/main.js',
@@ -12,7 +12,7 @@ module.exports = {
     },
     config: {
       entry: './src/pages/Config/main.js',
-      template: './public/config.html',
+      template: './public/index.html',
       title: 'Inspection Assistant - Config',
       filename: 'config.html',
       chunks: ['chunk-vendors', 'chunk-common', 'config']
