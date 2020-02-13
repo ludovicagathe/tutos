@@ -23,7 +23,7 @@
 
 <script>
 export default {
-  name: 'Config',
+  name: 'Inspections',
 
   components: {
 
