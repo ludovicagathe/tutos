@@ -34,7 +34,9 @@ export default {
     }
   },
   methods: {},
-  mounted() {}
+  mounted() {
+    document.title = "Settings"
+  }
 };
 </script>
 

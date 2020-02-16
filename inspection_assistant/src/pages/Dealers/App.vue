@@ -1,22 +1,7 @@
 <template>
 <v-app>
   <v-content>
-    <v-container fill-height>
-      <v-row justify="center" align="center" no-gutters>
-        <v-col cols="12">
-          <div class="center-img">
-            <v-img :src="require('../../assets/eemo_logo.png')" class="my-3" contain position="center center"></v-img>
-          </div>
-        </v-col>
-        <v-col cols="12">
-          <transition name="fade">
-            <div class="text-center action-pane">
-              <v-btn color="success" class="start-btn" width="60%">Home</v-btn>
-            </div>
-          </transition>
-        </v-col>
-      </v-row>
-    </v-container>
+
   </v-content>
 </v-app>
 </template>
@@ -34,7 +19,9 @@ export default {
     }
   },
   methods: {},
-  mounted() {}
+  mounted() {
+    document.title = "Dealers"
+  }
 };
 </script>
 

@@ -5,6 +5,9 @@
       <v-row no-gutters>
         <v-col cols="12">
           <v-app-bar app color="indigo lighten-3" dark>
+            <v-btn href="/inspections.html" fab color="grey lighten-4" height="32" width="32" class="mr-6">
+              <v-icon color="grey darken-2">mdi-arrow-left</v-icon>
+            </v-btn>
             <div class="d-flex align-center">
               <v-img alt="Energy Efficiency Management Office" class="stretch mr-2" contain src="../../assets/eemo_logo.png" href="/index.html" transition="scale-transition" width="100" />
             </div>
@@ -15,8 +18,8 @@
               <v-icon color="#999999">mdi-settings</v-icon>
             </v-btn>
 
-            <v-btn dark color="primary" @click="openAddInspection">
-              <span class="mr-2">New Inspection</span>
+            <v-btn dark color="primary" @click="openAddSheet">
+              <span class="mr-2">New Sheet</span>
               <v-icon>mdi-file-plus</v-icon>
             </v-btn>
           </v-app-bar>
@@ -27,32 +30,44 @@
           <v-container class="list-pane">
             <v-row align="start">
               <v-col cols="10" class="offset-sm-1">
-                <h2>Inspection Records on this Device</h2>
+                <h2 class="green--text text--accent-4">Inspection</h2>
+              </v-col>
+              <v-col cols="5" class="offset-sm-1">
+                <h3 class="mx-3 mb-3"><v-icon class="mr-6">mdi-calendar</v-icon>Date</h3>
+                <p class="mx-3 mb-3" v-text="parentDetails.date"></p>
+                <h3 class="mx-3 mb-3"><v-icon class="mr-6">mdi-account</v-icon>Officer 1</h3>
+                <p class="mx-3 mb-3" v-text="parentDetails.officer1"></p>
+              </v-col>
+              <v-col cols="5" class="offset-sm-1">
+                <h3 class="mx-3 mb-3"><v-icon class="mr-6">mdi-map-marker</v-icon>Locality</h3>
+                <p class="mx-3 mb-3" v-text="parentDetails.locality"></p>
+                <h3 class="mx-3 mb-3"><v-icon class="mr-6">mdi-account</v-icon>Offier 2</h3>
+                <p class="mx-3 mb-3" v-text="parentDetails.officer2"></p>
               </v-col>
 
-              <v-col cols="12">
+              <v-col cols="12" min-height="300">
                 <v-card max-width="96%" class="mx-auto">
                   <v-toolbar color="blue darken-4" dark>
-                    <v-toolbar-title>Date</v-toolbar-title>
+                    <v-toolbar-title>Dealer</v-toolbar-title>
                     <v-spacer></v-spacer>
-                    <v-toolbar-title>Locality</v-toolbar-title>
+                    <v-toolbar-title class="pl-12">Point of Sale</v-toolbar-title>
                     <v-spacer></v-spacer>
-                    <v-toolbar-title>No. of Dealers</v-toolbar-title>
+                    <v-toolbar-title>No. of Non Compliance</v-toolbar-title>
                   </v-toolbar>
 
                   <v-list two-line subheader>
                     <v-list-item-group color="primary">
-                      <div v-for="(item, index) in inspections" :key="item.date + '-' + index">
-                        <v-list-item color="primary" :href="'inspection.html?iid=' + item.id">
-                          <v-list-item-content v-text="item.date"></v-list-item-content>
+                      <div v-for="(item, index) in dealers" :key="item.date + '-' + index">
+                        <v-list-item color="primary">
+                          <v-list-item-content v-text="item.name"></v-list-item-content>
                           <v-spacer></v-spacer>
-                          <v-list-item-content v-text="item.locality"></v-list-item-content>
+                          <v-list-item-content v-text="item.pos" class="pr-12"></v-list-item-content>
                           <v-spacer></v-spacer>
                           <v-list-item-content>
-                            <span v-text="item.dealers.length" class="text-center"></span>
+                            <span v-text="item.nonCompliance.length" class="text-center"></span>
                           </v-list-item-content>
                         </v-list-item>
-                        <v-divider v-if="index + 1 < inspections.length" :key="index"></v-divider>
+                        <v-divider v-if="index + 1 < dealers.length" :key="index"></v-divider>
                       </div>
                     </v-list-item-group>
 
@@ -77,7 +92,7 @@
         </v-col>
       </v-row>
 
-      <v-row justify="center">
+      <!--v-row justify="center">
         <v-dialog v-model="dialogAdd" persistent max-width="60%">
           <v-card>
             <v-card-title class="headline">Add New Sheet ?</v-card-title>
@@ -112,7 +127,7 @@
             Close
           </v-btn>
         </v-snackbar>
-      </v-row>
+      </v-row-->
     </v-container>
   </v-content>
 </v-app>
@@ -127,6 +142,18 @@ export default {
   },
   data() {
     return {
+      dealers: [
+        {
+        name: "test dealer",
+        pos: "Dealer Address, Somewhere, Maybe a long address",
+        timeIn: "10:00",
+        timeOut: "10:30",
+        allInspected: {
+
+        },
+        nonCompliance: [4,5,6,3,7,5]
+        }
+      ],
       dialogAdd: false,
       dialogText: "",
       dateMenu: false,
@@ -134,11 +161,14 @@ export default {
       snackbar: false,
       snackbarText: "",
       inspections: [],
-      newInspection: {
-        locality: "",
-        date: "",
-        officer1: "",
-        officer2: ""
+      parentDetails: {},
+      queryParams: this.getQueryParams(),
+      newSheet: {
+        dealer: "",
+        pointOfSale: "",
+        timeIn: "",
+        timeOut: "",
+        pid: 0
       },
       validation: {
         locality: [
@@ -156,47 +186,13 @@ export default {
   },
   computed: {},
   methods: {
-    openAddInspection() {
+    openAddSheet() {
       this.dialogAdd = true;
     },
-    addInspection() {
-      let inspectionObject = {
-        locality: "",
-        date: "",
-        officer1: "",
-        officer2: "",
-        dealers: []
-      }
-      if (this.$refs.form.validate()) {
-        this.dialogAdd = false;
-        inspectionObject.locality = this.newInspection.locality;
-        inspectionObject.date = this.newInspection.date;
-        inspectionObject.officer1 = this.newInspection.officer1;
-        inspectionObject.officer2 = this.newInspection.officer2;
-        if (this.localStorageAvailable()) {
-          this.saveLocal = this.saveToStore(inspectionObject, 'inspections');
-        } else {
-          this.saveLocal = "Storage space not available"
-        }
-        if (this.saveLocal != "ok") {
-          this.snackbarText = this.saveLocal;
-          this.snackbar = true;
-        } else {
-          this.snackbarText = "Saved";
-          this.snackbar = true;
-          this.$refs.form.reset();
-          this.inspectionObject = {
-            locality: "",
-            date: "",
-            officer1: "",
-            officer2: "",
-            dealers: []
-          };
-          this.getInspections();
-        }
-      }
+    addSheet() {
+      console.log("Add Sheet");
     },
-    getInspections() {
+    getParentInspection() {
       let inspections = [];
       let self = this;
       try {
@@ -204,31 +200,34 @@ export default {
       } catch (e) {
         self.snackbarText = "No inspection on device";
         self.snackbar = true;
+        self.parentDetails = {};
       }
       if (Array.isArray(inspections)) {
-        self.inspections = inspections.sort((a, b) => {
-          return (a.date < b.date) ? 1 : -1;
-        })
+        self.parentDetails = inspections.filter((inspected) => {
+          return inspected.id == parseInt(self.queryParams.iid);
+        })[0];
       } else {
         self.snackbarText = "Inspection data corrupted"
         self.snackbar = true;
+        self.parentDetails = {};
       }
     },
     closeForm() {
-      this.$refs.form.reset();
-      this.inspectionObject = {
-        locality: "",
-        date: "",
-        officer1: "",
-        officer2: "",
-        dealers: []
-      }
-      this.dialogAdd = false;
+      // close form
+    },
+    getQueryParams() {
+      let params = {}; window.location.search.substring(1).split("&").forEach((a) => {
+        let splitted = a.split("=");
+        params[splitted[0]] = splitted[1];
+      });
+      return params;
     }
   },
   mounted() {
     //this.TEST_fillLocalStorage(true);
-    this.getInspections();
+    document.title = "Inspection" + this.queryParams.iid;
+    this.getParentInspection();
+    console.log(this.parentDetails);
   }
 };
 </script>

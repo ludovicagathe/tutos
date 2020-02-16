@@ -13,23 +13,30 @@ module.exports = {
     config: {
       entry: './src/pages/Config/main.js',
       template: './public/index.html',
-      title: 'Inspection Assistant - Config',
+      title: 'Config',
       filename: 'config.html',
       chunks: ['chunk-vendors', 'chunk-common', 'config']
     },
     inspections: {
       entry: './src/pages/Inspections/main.js',
       template: './public/index.html',
-      title: 'Inspection Assistant - Config',
+      title: 'Inspections',
       filename: 'inspections.html',
-      chunks: ['chunk-vendors', 'chunk-common', 'config']
+      chunks: ['chunk-vendors', 'chunk-common', 'inspections']
+    },
+    inspection: {
+      entry: './src/pages/Inspection/main.js',
+      template: './public/index.html',
+      title: 'Inspection',
+      filename: 'inspection.html',
+      chunks: ['chunk-vendors', 'chunk-common', 'inspection']
     },
     dealers: {
       entry: './src/pages/Dealers/main.js',
       template: './public/index.html',
       title: 'Inspection Assistant - Config',
       filename: 'dealers.html',
-      chunks: ['chunk-vendors', 'chunk-common', 'config']
+      chunks: ['chunk-vendors', 'chunk-common', 'dealers']
     },
   }
 }

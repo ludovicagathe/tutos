@@ -10,12 +10,12 @@
         </v-col>
         <v-col cols="12">
           <transition name="fade">
-            <div v-if="progressStep >= 6 && appSupported" class="text-center action-pane">
-              <v-btn color="success" class="start-btn" width="60%">Start</v-btn>
+            <div v-if="progressStep >= 9 && appSupported" class="text-center action-pane">
+              <v-btn color="success" class="start-btn" width="60%" href="/inspections.html">Start</v-btn>
             </div>
           </transition>
           <transition name="fade">
-            <div v-if="progressStep < 6" class="text-center linear-load">
+            <div v-if="progressStep < 9" class="text-center linear-load">
               <v-container>
                 <v-row class="fill-height" align-content="center" justify="center">
                   <v-col cols="6">
@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import crypto from 'crypto'
 export default {
   name: 'Home',
 
@@ -60,14 +61,15 @@ export default {
       online: false,
       lowStorage: false,
       deviceID: "",
+      settings: false
     }
   },
   computed: {
     appSupported() {
-      return !this.lowStorage && this.localStorageReady;
+      return (this.progressStep < 8) ? true : (!this.lowStorage && this.localStorageReady);
     },
     percentLoaded() {
-      return Math.ceil(this.progressStep / 6 * 100)
+      return Math.ceil(this.progressStep / 8 * 100)
     },
     progressMessage() {
       switch (this.progressStep) {
@@ -82,6 +84,10 @@ export default {
         case 5:
           return (this.deviceID) ? "Device ID available" : "Device not registered"
         case 6:
+            return "Checking settings"
+        case 7:
+            return (this.settings != "invalid") ? "Settings loaded" : "Settings not found"
+        case 8:
           return "Loading complete"
         default:
           return "Initialising"
@@ -127,6 +133,8 @@ export default {
     let self = this;
     let wait = 500;
 
+    document.title = "EEMO - Inspection Assistant"
+
     // check localStorage availability
     setTimeout(() => {
       self.progressStep++;
@@ -143,11 +151,32 @@ export default {
                 if(localStorage && localStorage.deviceID) {
                   self.deviceID = localStorage.deviceID;
                 } else {
-                  self.deviceID = "";
+                  const secret = "eemotablets";
+                  const hash = crypto.createHmac('sha256', secret).update(new Date().toISOString()).digest('hex');
+                  self.deviceID = hash.substr(0, 6);
                 }
                 self.progressStep++;
                 setTimeout(() => {
+                  if(localStorage.settings) {
+                    try {
+                      this.settings = JSON.parse(localStorage.settings);
+                    } catch(e) {
+                      console.log("Settings not valid");
+                      this.settings = "invalid";
+                    }
+                  } else {
+                    localStorage.setItem('settings', '{"officers":["Mr O. Sewtohul","Mr K. Ramkurrun","Ms S. Safee","Mr K.Sooruth","Mr L. Agathe","Mr H. Gunness","Mr D. Mahadawoo","Engineer 4"],"regulatedMachinery":["Refrigerating Appliances","Electric Ovens","Dishwashers","Washing Machines","Air Conditioners","Televisions"]}');
+                  }
                   self.progressStep++;
+                  setTimeout(() => {
+                    self.progressStep++;
+                    setTimeout(() => {
+                      self.progressStep++;
+                      setTimeout(() => {
+                        self.progressStep++;
+                      }, wait);
+                    }, wait);
+                  }, wait);
                 }, wait);
               }, wait);
             }, wait);
