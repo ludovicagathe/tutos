@@ -11,7 +11,7 @@
         <v-col cols="12">
           <transition name="fade">
             <div v-if="progressStep >= 9 && appSupported" class="text-center action-pane">
-              <v-btn color="success" class="start-btn" width="60%" href="/inspections.html">Start</v-btn>
+              <v-btn color="success" class="start-btn" width="60%" href="./inspections.html">Start</v-btn>
             </div>
           </transition>
           <transition name="fade">
@@ -82,7 +82,7 @@ export default {
         case 4:
           return (!this.lowStorage) ? "Storage available" : "Storage low"
         case 5:
-          return (this.deviceID) ? "Device ID available" : "Device not registered"
+          return (this.deviceID !== "") ? "Device ID available" : "Device not registered"
         case 6:
             return "Checking settings"
         case 7:
@@ -128,6 +128,10 @@ export default {
       }
       return true;
     },
+    relPath(asset) {
+      let sanityCheck = (asset.substr(0,1) !== "/") ? "/" : ""
+      return location.origin + sanityCheck + asset;
+    }
   },
   mounted() {
     let self = this;
@@ -154,6 +158,7 @@ export default {
                   const secret = "eemotablets";
                   const hash = crypto.createHmac('sha256', secret).update(new Date().toISOString()).digest('hex');
                   self.deviceID = hash.substr(0, 6);
+                  localStorage.deviceID = self.deviceID;
                 }
                 self.progressStep++;
                 setTimeout(() => {

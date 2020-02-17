@@ -5,22 +5,22 @@
       <v-row no-gutters>
         <v-col cols="12">
           <v-app-bar app color="indigo lighten-3" dark>
-            <v-btn href="/inspections.html" fab color="grey lighten-4" height="32" width="32" class="mr-6">
+            <v-btn href="./inspections.html" fab color="grey lighten-4" height="32" width="32" class="mr-6">
               <v-icon color="grey darken-2">mdi-arrow-left</v-icon>
             </v-btn>
             <div class="d-flex align-center">
-              <v-img alt="Energy Efficiency Management Office" class="stretch mr-2" contain src="../../assets/eemo_logo.png" href="/index.html" transition="scale-transition" width="100" />
+              <v-img alt="Energy Efficiency Management Office" class="stretch mr-2" contain src="../../assets/eemo_logo.png" href="./index.html" transition="scale-transition" width="100" />
             </div>
 
             <v-spacer></v-spacer>
 
-            <v-btn href="/config.html" fab color="blue lighten-5" height="32" width="32" class="mr-12">
+            <v-btn href="./config.html" fab color="blue lighten-5" height="32" width="32" class="mr-12">
               <v-icon color="#999999">mdi-settings</v-icon>
             </v-btn>
 
             <v-btn dark color="primary" @click="openAddSheet">
-              <span class="mr-2">New Sheet</span>
-              <v-icon>mdi-file-plus</v-icon>
+              <span class="mr-2">New Dealer Sheet</span>
+              <v-icon>mdi-file-edit-outline</v-icon>
             </v-btn>
           </v-app-bar>
         </v-col>
@@ -41,7 +41,7 @@
               <v-col cols="5" class="offset-sm-1">
                 <h3 class="mx-3 mb-3"><v-icon class="mr-6">mdi-map-marker</v-icon>Locality</h3>
                 <p class="mx-3 mb-3" v-text="parentDetails.locality"></p>
-                <h3 class="mx-3 mb-3"><v-icon class="mr-6">mdi-account</v-icon>Offier 2</h3>
+                <h3 class="mx-3 mb-3"><v-icon class="mr-6">mdi-account</v-icon>Officer 2</h3>
                 <p class="mx-3 mb-3" v-text="parentDetails.officer2"></p>
               </v-col>
 
@@ -225,9 +225,8 @@ export default {
   },
   mounted() {
     //this.TEST_fillLocalStorage(true);
-    document.title = "Inspection" + this.queryParams.iid;
+    document.title = "Inspection No." + this.queryParams.iid;
     this.getParentInspection();
-    console.log(this.parentDetails);
   }
 };
 </script>

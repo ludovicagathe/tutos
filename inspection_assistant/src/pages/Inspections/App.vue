@@ -6,18 +6,18 @@
         <v-col cols="12">
           <v-app-bar app color="indigo lighten-3" dark>
             <div class="d-flex align-center">
-              <v-img alt="Energy Efficiency Management Office" class="stretch mr-2" contain src="../../assets/eemo_logo.png" href="/index.html" transition="scale-transition" width="100" />
+              <v-img alt="Energy Efficiency Management Office" class="stretch mr-2" contain src="../../assets/eemo_logo.png" href="./index.html" transition="scale-transition" width="100" />
             </div>
 
             <v-spacer></v-spacer>
 
-            <v-btn href="/config.html" fab color="blue lighten-5" height="32" width="32" class="mr-12">
+            <v-btn href="./config.html" fab color="blue lighten-5" height="32" width="32" class="mr-12">
               <v-icon color="#999999">mdi-settings</v-icon>
             </v-btn>
 
             <v-btn dark color="primary" @click="openAddInspection">
               <span class="mr-2">New Inspection</span>
-              <v-icon>mdi-file-plus</v-icon>
+              <v-icon>mdi-folder-plus-outline</v-icon>
             </v-btn>
           </v-app-bar>
         </v-col>
@@ -43,7 +43,7 @@
                   <v-list two-line subheader>
                     <v-list-item-group color="primary">
                       <div v-for="(item, index) in inspections" :key="item.date + '-' + index">
-                        <v-list-item color="primary" :href="'inspection.html?iid=' + item.id">
+                        <v-list-item color="primary" :href="'./inspection.html?iid=' + item.id">
                           <v-list-item-content v-text="item.date"></v-list-item-content>
                           <v-spacer></v-spacer>
                           <v-list-item-content v-text="item.locality"></v-list-item-content>
@@ -92,9 +92,9 @@
                   <v-date-picker v-model="newInspection.date" @input="dateMenu = false"></v-date-picker>
                 </v-menu>
 
-                <v-select :items="['a','b','c']" label="Enforcement Officer 1" solo v-model="newInspection.officer1" :rules="validation.enforcement"></v-select>
+                <v-select :items="settings.officers" label="Enforcement Officer 1" solo v-model="newInspection.officer1" :rules="validation.enforcement"></v-select>
 
-                <v-select :items="['a','b','c']" label="Enforcement Officer 2" solo v-model="newInspection.officer2" :rules="validation.enforcement"></v-select>
+                <v-select :items="settings.officers" label="Enforcement Officer 2" solo v-model="newInspection.officer2" :rules="validation.enforcement"></v-select>
 
               </v-form>
             </v-card-text>
@@ -140,6 +140,7 @@ export default {
         officer1: "",
         officer2: ""
       },
+      settings: this.getSettings(),
       validation: {
         locality: [
           val => (val && val.length > 2) || "Minimum input is 3 characters"
@@ -201,18 +202,41 @@ export default {
       let self = this;
       try {
         inspections = JSON.parse(localStorage.getItem('inspections'));
+        if (Array.isArray(inspections)) {
+          self.inspections = inspections.sort((a, b) => {
+            return (a.date < b.date) ? 1 : -1;
+          })
+        } else {
+          self.snackbarText = "Inspection data absent or corrupted"
+          self.snackbar = true;
+          localStorage.setItem('inspections', "")
+        }
       } catch (e) {
         self.snackbarText = "No inspection on device";
         self.snackbar = true;
+        localStorage.setItem('inspections', "")
       }
-      if (Array.isArray(inspections)) {
-        self.inspections = inspections.sort((a, b) => {
-          return (a.date < b.date) ? 1 : -1;
-        })
-      } else {
-        self.snackbarText = "Inspection data corrupted"
+    },
+    getSettings() {
+      let settings = JSON.parse(localStorage.getItem('settings'));
+      let self = this;
+      let defaultSettings = '{"officers":["Mr O. Sewtohul","Mr K. Ramkurrun","Ms S. Safee","Mr K.Sooruth","Mr L. Agathe","Mr H. Gunness","Mr D. Mahadawoo","Engineer 4"],"regulatedMachinery":["Refrigerating Appliances","Electric Ovens","Dishwashers","Washing Machines","Air Conditioners","Televisions"]}';
+      try {
+        if (Object.keys(settings).length > 0) {
+          return settings;
+        } else {
+          self.snackbarText = "Settings not found. Using default"
+          self.snackbar = true;
+          localStorage.setItem('settings', defaultSettings);
+          settings = JSON.parse(defaultSettings);
+        }
+      } catch (e) {
+        self.snackbarText = "Settings not found. Using default";
         self.snackbar = true;
+        localStorage.setItem('settings', defaultSettings);
+        settings = JSON.parse(defaultSettings);
       }
+      return settings;
     },
     closeForm() {
       this.$refs.form.reset();
