@@ -38,5 +38,12 @@ module.exports = {
       filename: 'dealers.html',
       chunks: ['chunk-vendors', 'chunk-common', 'dealers']
     },
+    dealer: {
+      entry: './src/pages/Dealer/main.js',
+      template: './public/index.html',
+      title: 'Dealer Inspection',
+      filename: 'dealer.html',
+      chunks: ['chunk-vendors', 'chunk-common', 'dealer']
+    },
   }
 }
