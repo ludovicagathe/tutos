@@ -1,0 +1,11 @@
+# To verify that your server is healthy
+- PHP (sudo systemctl php status)
+- nginx/apache
+- mysql
+- openssl
+- nodejs (node -v)
+- mongodb
+- git
+- apt update, upgrade and dist-upgrade
+- vue-cli
+- nodemon
