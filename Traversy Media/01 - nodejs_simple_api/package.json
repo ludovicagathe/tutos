@@ -1,0 +1,15 @@
+{
+  "name": "nodejs_simple_api",
+  "version": "1.0.0",
+  "description": "Simple API in node without express following Brad Traversy's tutorial",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js",
+    "dev": "nodemon main.js"
+  },
+  "author": "Ludovic Agathe <ludovic.agathe@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}
