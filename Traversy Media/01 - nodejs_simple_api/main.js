@@ -1,14 +1,16 @@
 const http = require('http');
 
 const PORT = process.env.PORT || 5050;
-const products = require('./data/products')
+const { getAllProducts, getProduct } = require('./controllers/productController');
 
-const server = http.createServer((req,res) => {
+const server = http.createServer((req, res) => {
   if(req.method === 'GET'){
-    switch(req.url) {
-      case '/api/products':
-        res.writeHead(200, {"Content-Type": "application/json"});
-        res.end(JSON.stringify(products));
+    switch(true) {
+      case /^\/api\/products$/.test(req.url):
+        getAllProducts(req, res);
+        break;
+      case /^\/api\/product\/\d+$/.test(req.url):
+        getProduct(req, res);
         break;
       default:
         res.writeHead(403, {"Content-Type": "text/html"});

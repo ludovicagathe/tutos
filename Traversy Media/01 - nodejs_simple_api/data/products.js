@@ -1,5 +1,6 @@
 module.exports = [
   {
+    "id": 1,
     "name": "Product 1",
     "description": "This is an awesome first product",
     "price": "10000",
@@ -17,6 +18,7 @@ module.exports = [
     }
   },
   {
+    "id": 2,
     "name": "Product 21",
     "description": "This is an awesome second product",
     "price": "20000",
@@ -33,6 +35,7 @@ module.exports = [
     }
   },
   {
+    "id": 3,
     "name": "Platinum Product",
     "description": "This is an awesome high class product",
     "price": "100000",
