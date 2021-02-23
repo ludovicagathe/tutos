@@ -1,0 +1,23 @@
+{
+  "name": "api",
+  "version": "0.0.1",
+  "description": "General purpose API from Dev Ed tutorial",
+  "main": "main.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "keywords": [
+    "api",
+    "nodejs",
+    "mongodb"
+  ],
+  "author": "Ludovic Agathe <ludovic.agathe@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.11.17",
+    "nodemon": "^2.0.7"
+  }
+}
