@@ -5,9 +5,11 @@ const bodyParser = require('body-parser');
 require('dotenv/config');
 
 const postsRoute = require('./routes/posts');
+const postRoute = require('./routes/post');
 
 app.use(bodyParser.json());
 app.use('/posts', postsRoute);
+app.use('/post', postRoute);
 
 app.get('/', (req, res) => {
   res.send('HOME');

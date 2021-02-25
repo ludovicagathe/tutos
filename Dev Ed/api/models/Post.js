@@ -23,8 +23,8 @@ const PostSchema = mongoose.Schema({
     default: "general"
   },
   date: {
-    type:String,
-    default: new Date().toISOString()
+    type: Date,
+    default: Date.now
   }
 });
 
