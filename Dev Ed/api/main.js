@@ -15,7 +15,15 @@ app.get('/', (req, res) => {
   res.send('HOME');
 })
 
-mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PW}@c0.ucw3v.mongodb.net/`, { useNewUrlParser: true, useUnifiedTopology: true }, () => console.log("Connected to DB"));
+mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PW}@c0.ucw3v.mongodb.net/${process.env.DB}`, { useNewUrlParser: true, useUnifiedTopology: true });
+const db = mongoose.connection;
+db.on('error', () => {
+  console.error.bind(console, 'connection error:');
+});
+db.on('open', () => {
+  console.log('\x1b[32m%s\x1b[0m', 'Connected to DB ');
+  console.log('\x1b[36m%s\x1b[0m', `Connected to '${db.name}' database`);
+})
 
-console.log(`Server running on port ${process.env.PORT}`);
+console.log('\x1b[32m%s\x1b[0m', `Server running on port ${process.env.PORT}`);
 app.listen(process.env.PORT);
