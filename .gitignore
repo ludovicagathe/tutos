@@ -66,3 +66,4 @@ package-lock.json
 **/package-lock.json
 **src/private
 **/src/private
+redis
