@@ -1,6 +1,6 @@
 const mocha = require('mocha');
 const assert = require('chai').assert;
-const supertest = require('supertest');
+// const supertest = require('supertest');
 // const app = require('../index.js');
 require('dotenv').config();
 
@@ -8,7 +8,7 @@ let testRun = [];
 let testID = -1;
 let modes = ['prod', 'dev'];
 
-describe('Preliminary Tests', () => {
+describe('PRELIMINARY TESTS', () => {
   let currentTestID = testID++;
   before(() => {
     testRun[currentTestID] = Date.now();

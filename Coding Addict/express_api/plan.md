@@ -15,12 +15,12 @@
 [*] Define app.listen
 [*] Initialise test scripts
 [ ] Define Tests
-  [ ] Check environment (dev/prod)
+  [*] Check environment (dev/prod)
   [ ] Test db connectivity
     [ ] MongoDB
-     [ ] Access DB
+     [*] Access DB
      [ ] Create test document
-     [ ] Drop test table
+     [*] Drop test table
      [ ] Create test entries
      [ ] Test CRUD operations on data
     [ ] Redis

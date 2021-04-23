@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "serve": "nodemon index.js",
-    "test": "mocha ./tests/ || true"
+    "redis-start": "cd ../../redis && START /B \"\" redis-server.exe --maxmemory 16mb --maxmemory-policy allkeys-lru",
+    "redis-cli": "cd ../../redis && redis-cli.exe",
+    "redis-ping": "cd ../../redis && redis-cli.exe ping",
+    "redis-stop": "cd ../../redis && redis-cli.exe shutdown",
+    "test": "mocha --timeout 5000 ./tests/ || true"
   },
   "author": "Ludovic Agathe <ludovic.agathe@gmail.com>",
   "license": "MIT",
