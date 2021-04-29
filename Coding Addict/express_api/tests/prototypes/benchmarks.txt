@@ -1,0 +1,20 @@
+duration: 9 ms
+rss: 32.78 MB
+heapTotal: 15.06 MB
+heapUsed: 9.69 MB
+external: 1.26 MB
+arrayBuffers: 0.06 MB
+
+duration: 21 ms
+rss: 32.89 MB
+heapTotal: 14.81 MB
+heapUsed: 9.52 MB
+external: 1.25 MB
+arrayBuffers: 0.05 MB
+
+duration: 17 ms
+rss: 33.2 MB
+heapTotal: 14.81 MB
+heapUsed: 9.98 MB
+external: 1.45 MB
+arrayBuffers: 0.24 MB

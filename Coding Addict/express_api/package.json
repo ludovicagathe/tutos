@@ -14,14 +14,15 @@
   "author": "Ludovic Agathe <ludovic.agathe@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "helmet": "^4.5.0",
     "joi": "^17.4.0",
     "monk": "^7.3.4",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "nedb": "^1.8.0",
+    "redis": "^3.1.2"
   },
   "devDependencies": {
     "chai": "^4.3.4",
