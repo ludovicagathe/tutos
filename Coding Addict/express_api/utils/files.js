@@ -45,8 +45,14 @@ function getJSON(file) {
 
 function putJSON(file, data, update) {
   let dataStr;
-  if(!data) {
+  if(!file) {
     return { error: true, message: "file not specified" };
+  }
+  if(typeof file !== 'string') {
+    return { error: true, message: "file should be a string" };
+  }
+  if(!data) {
+    return { error: true, message: "data not provided" };
   }
   if(typeof data == 'function') {
     return { error: true, message: "functions are not accepted" };
@@ -66,7 +72,7 @@ function putJSON(file, data, update) {
     return { success: true };
   } catch(e) {
     console.log(e);
-    return { error: true, fnf: true };
+    return { error: true, message: 'something went wrong and the file could not be written' };
   }
 }
 

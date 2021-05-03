@@ -70,10 +70,18 @@ describe('READ - Read JSON file and return Object', () => {
   });
 });
 
-// describe('WRITE - Write JSON file', () => {
-//   it("Detect undefined data and flag an error", () => {
-//
-//   });
+describe('WRITE - Write JSON file', () => {
+  it("Detect undefined file and flag an error", () => {
+    let test = ftools.putJSON();
+    if(peek_mode) { console.log(test) }
+    assert.isTrue(test.error, "putJSON cannot be called without arguments");
+    assert.equal(test.message, "file not specified", "putJSON cannot be called without arguments");
+
+    test = ftools.putJSON(1);
+    if(peek_mode) { console.log(test) }
+    assert.isTrue(test.error, "file argument must be a string");
+    assert.equal(test.message, "file should be a string", "providing invalid file argument yields an error");
+  });
 //
 //   it("Detect empty data and write empty object in file", () => {
 //
@@ -94,7 +102,7 @@ describe('READ - Read JSON file and return Object', () => {
 //   it("Write valid object to file", () => {
 //
 //   });
-// });
+});
 //
 // describe('UPDATE - Read JSON file and update', () => {
 //   it("Read empty file and return null object", () => {
