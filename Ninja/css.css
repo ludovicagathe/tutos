@@ -1,0 +1,18 @@
+/* CSS Tricks from Kevin Powell
+https://www.youtube.com/watch?v=HOM47v73yG8 */
+
+/* HTMl
+<div class="box">Test</div>
+ */
+.box {
+  background-color: blue;
+  width: 50%;
+  aspect-ratio: 1 / 1; /* square */
+  inset: 0; /* position in middle of screen */
+  position: fixed;
+  margin: auto;
+  box-shadow:
+    0 2rem -1rem red
+    0 4rem -2rem yellow
+    0 6rem -3rem green; /* shadows as stacked borders */
+}
