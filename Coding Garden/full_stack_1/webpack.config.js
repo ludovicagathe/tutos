@@ -58,7 +58,13 @@ module.exports = {
   },
   resolve: {
     fallback: {
-      'path': false,
+      'path': require.resolve('path-browserify'),
+      'process': require.resolve('process/browser')
     }
+  },
+  node: {
+    global: true,
+    __filename: true,
+    __dirname: true,
   }
 }

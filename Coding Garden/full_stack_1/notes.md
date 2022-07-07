@@ -1,0 +1,1 @@
+npm i -D --only=dev assert buffer console-browserify constants-browserify crypto-browserify domain-browser events stream-http https-browserify os-browserify/browser path-browserify punycode process/browser querystring-es3 stream-browserify string_decoder util timers-browserify tty-browserify url util vm-browserify browserify-zlib
