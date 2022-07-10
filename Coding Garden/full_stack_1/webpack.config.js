@@ -1,7 +1,8 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+import webpack from 'webpack';
+import path from 'path';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 
-module.exports = {
+export default {
   mode: 'development',
   target: 'web',
   entry: {
@@ -58,8 +59,12 @@ module.exports = {
   },
   resolve: {
     fallback: {
+      //'process': require.resolve('process/browser'),
       'path': require.resolve('path-browserify'),
-      'process': require.resolve('process/browser')
+    },
+    alias: {
+      path: 'path',
+      //process: 'process/browser',
     }
   },
   node: {

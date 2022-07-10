@@ -1,3 +1,4 @@
-const path = require('path');
+//const process = require('process/browser');
+import path from 'path';
 
-console.log(path.resolve(''));
+console.log(path.resolve(__dirname));

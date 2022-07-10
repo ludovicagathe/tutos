@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "An attempt at creating a CMS in Node",
   "main": "./src/main.js",
+  "type": "module",
   "scripts": {
     "build": "webpack",
     "compile": "webpack --mode=production",
