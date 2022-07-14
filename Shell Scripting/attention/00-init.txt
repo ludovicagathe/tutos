@@ -1,0 +1,1 @@
+All warnings to be logged in this directory

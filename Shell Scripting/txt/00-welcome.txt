@@ -1,0 +1,7 @@
+Welcome to the server setup automation tool developed 
+by an amateur web enthusiast!
+
+This is a small utility, free to use and share. 
+I take no responsibility for any issue, data loss or 
+other problems related to the use of this script.
+Always test your applications/systems thoroughly.
