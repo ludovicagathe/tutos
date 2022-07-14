@@ -51,7 +51,10 @@ fi
 
 if [ ! -d "./tmp" -a ! -d "./tmp" ]
 then
-	echo "Clean up successful"
+	clear
+	echo "Clean up successful. Thank you for using this script. Please leave your feedback at ludovic.agathe@gmail"
+else
+	echo "Something went wrong"
 fi
 #echo -e "Hello who? > \c"
 #read -r
@@ -73,6 +76,8 @@ fi
 #}
 
 #function read_args() {}
+#function flag() {} # report and record errors
+#function log() {} # report and record operations
 
 #$* groups all arguments
 #$@ separates arguments

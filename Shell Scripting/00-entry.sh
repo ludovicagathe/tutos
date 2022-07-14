@@ -68,6 +68,7 @@ fi
 # AND/OR: [ $a -lt 20 -a $b -gt 100 ], [ $a -lt 20 -o $b -gt 100 ]
 # string comparison: [ $a = $b ], [ $a != $b ], [ -z $a ] (check 0 size), [ -n $a ] (check non-zero size), [ $a ] (check empty string)
 # check for file or directory: [ -f $f ] (checks if regular file exists), [ -d $d ] check if directory exists, -g or -u -> group or user bit set, -r or -w or -x -> readable or writable or executable, -s size greater than 0, -e for either file or directory
+# test
 
 
 #function validate() {
