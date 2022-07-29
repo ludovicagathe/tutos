@@ -9,12 +9,15 @@ const cors = require('cors');
 // middlewares
 const middlewares = require('./middlewares');
 
+//utils
+const filesys = require('./utils/filesys');
 
 // setup
 const port = process.env.PORT || 3000;
 const logging = process.env.LOGGING || 'common';
 
 // logging
+filesys.checkDir(path.resolve(__dirname, '..', 'logs'));
 const accessLogStream = fs.createWriteStream(path.resolve(__dirname, '..', 'logs', 'access.log'), { flags: 'a' });
 app.use(morgan(logging, { stream: accessLogStream }));
 
