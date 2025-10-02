@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
-    "axios": "^0.21.1",
+    "axios": ">=0.30.2",
     "es6-promise": "^4.2.8",
     "firebase": "^8.3.3",
     "vue": "^2.6.12",
@@ -20,6 +20,7 @@
     "@vue/cli-plugin-babel": "^4.5.12",
     "@vue/cli-plugin-eslint": "^4.5.12",
     "@vue/cli-service": "^4.5.12",
+    "axios": ">=0.30.2",
     "babel-eslint": "^10.0.1",
     "eslint": "^7.24.0",
     "eslint-plugin-vue": "^7.8.0",
