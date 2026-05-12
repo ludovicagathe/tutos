@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>First Vue App</title>
+  <script src="js/vue.global.js"></script>
+</head>
+<body>
+  <div id="app"></div>
+  <!--script src="js/main.js"></script-->
+  <script>
+    const template = "<div> \
+        <h1>{{ name }}</h1> \
+      </div>";
+    const data = function() {
+      return {
+        name: 'First Vue app!'
+      }
+    }
+    const app = Vue.createApp({ template, data });
+    app.mount('#app');
+  </script>
+</body>
+</html>
